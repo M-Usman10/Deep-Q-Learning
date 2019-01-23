@@ -1,0 +1,11 @@
+,layer_type,units,strides,padding,kernel_size,num_filters
+0,conv,,4,valid,8,32
+,elu,,,,,
+,conv,,2,valid,4,64
+,elu,,,,,
+,conv,,2,valid,3,64
+,elu,,,,,
+,flatten,,,,,
+,fc,512,,,,
+,elu,,,,,
+,fc,6,,,,
