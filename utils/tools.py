@@ -1,7 +1,9 @@
 import pandas as pd
 import keras.layers as layers
-
-
+import yaml
+import numpy as np
+from keras import backend as K
+import tensorflow as tf
 def construct_model_from_csv(model_file, input_placeholder):
         """
 
@@ -71,3 +73,35 @@ def construct_model_from_csv(model_file, input_placeholder):
                 x = layers.MaxPooling2D(kernel_size, strides=strides, padding=padding)(x)
                 
         return x
+
+
+def softmax(logits):
+    """"
+    :param logits: Unnormalized log probabilities
+    :return Normalized probabilities
+    """
+    logits-=np.max(logits)
+    return np.exp(logits)/np.sum(np.exp(logits))
+
+
+def load_config(file):
+    with open(file, 'r') as stream:
+        dict_ = yaml.load(stream)
+    return dict_
+
+def sample(replay_buffer,steps):
+    Data=[]
+    y=[]
+    a=[]
+    for i in range(steps):
+        point=replay_buffer.get()
+        Data.append(point[0][0])
+        y.append(point[1])
+        a.append(point[2])
+    return np.array(Data),np.array(y),np.array(a)
+
+def share_gpu():
+    config1 = tf.ConfigProto()
+    config1.gpu_options.allow_growth = True
+    sess = tf.Session(config=config1)
+    K.set_session(sess)

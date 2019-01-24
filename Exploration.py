@@ -1,14 +1,5 @@
 import numpy as np
 
-
-def preprocess_rgb_img(img, Frame_Processor):
-    return Frame_Processor.process_frame(img)
-
-
-def softmax(logits):
-    logits-=np.max(logits)
-    return np.exp(logits)/np.sum(np.exp(logits))
-
 def explore_boltzman( observation,gain,Policy_Network,actions):
         observation = np.stack(observation, axis=-1)
         observation = observation.reshape(1, *observation.shape)

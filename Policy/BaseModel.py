@@ -1,5 +1,5 @@
 
-from utils.callbacks import get_tensorboard_callback, get_checkpoint_call_back
+from Policy.callbacks import get_tensorboard_callback, get_checkpoint_call_back
 
 
 class BaseModel:
