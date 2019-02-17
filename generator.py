@@ -7,6 +7,7 @@ import os
 import gym
 from utils.Preprocessor import Frame_Processor
 from utils.tools import share_gpu
+from utils.tools import reshape
 class DataGenerator:
     def __init__(self,config):
         """
@@ -31,7 +32,7 @@ class DataGenerator:
                         lr=self.config['learning_rate'],
                         arch_config_file=os.path.join(self.config['path'], "qnetwork.csv"))
         self.model.construct_model(training=False)
-        self.FP=Frame_Processor(crop=True,convert_to_grayscale=True,normalize=True,coords=self.config,resize=True,resize_y=110,resize_x=84)
+        self.FP=Frame_Processor(self.config['image'],crop=True,convert_to_grayscale=True,normalize=True,coords=self.config,resize=True,resize_y=110,resize_x=84)
         self.buffer = shared_objs['replay_buffer']
         self.load_network = shared_objs['load_network']
 
@@ -71,6 +72,7 @@ class DataGenerator:
                 print('Steps Completed in current episode:{} with reward {} and q {} and mean r {} and mean q {}'
                       .format(ite2,episode_reward,total_q,episode_reward/ite2,total_q/ite2))
                 obs = self.env.reset()
+                obs=reshape(obs)
                 obs = self.FP.process_frame(obs)
                 total_q = 0
                 with tf.Session() as sess:
@@ -88,6 +90,7 @@ class DataGenerator:
             elif self.config['exploration']=='boltzman':
                 action = explore_boltzman(obs_queue, self.gain, self.model, self.actions)
             observation, reward, done, info=self.env.step(action)
+            observation=reshape(observation)
             episode_reward+=reward
             obs = self.FP.process_frame(observation)
             obs_queue.append(obs)

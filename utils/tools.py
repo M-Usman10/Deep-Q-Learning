@@ -4,6 +4,14 @@ import yaml
 import numpy as np
 from keras import backend as K
 import tensorflow as tf
+def reshape(observation):
+    if len(observation.shape)==2:
+        return observation
+    else:
+        len_=len(observation.shape)
+        for i in range(2-len_):
+            observation=observation[...,np.newaxis]
+        return observation
 def construct_model_from_csv(model_file, input_placeholder):
         """
 

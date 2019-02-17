@@ -1,3 +1,6 @@
 .idea/
 tf_logs/
 weights.h5
+.ipynb_checkpoints/
+__pycache__/
+TRFLBascis.ipynb/

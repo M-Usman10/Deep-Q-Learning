@@ -1,7 +1,7 @@
 from skimage.color import rgb2gray
 import skimage.transform as transform
 class Frame_Processor:
-   def __init__(self,crop=True,convert_to_grayscale=True,normalize=True,coords={},resize=True,resize_y=None,resize_x=None):
+   def __init__(self,image,crop=True,convert_to_grayscale=True,normalize=True,coords={},resize=True,resize_y=None,resize_x=None):
        self.crop=crop
        self.top_left_x=coords.get('top_left_x',0)
        self.top_left_y=coords.get('top_left_y',0)
@@ -12,8 +12,10 @@ class Frame_Processor:
        self.resize=resize
        self.resize_x=resize_x
        self.resize_y=resize_y
-
+       self.image=image
    def process_frame(self,frame):
+       if (self.image=='not_img'):
+           return frame
        if self.convert_to_grayscale:
            frame=rgb2gray(frame)
        if self.crop:
